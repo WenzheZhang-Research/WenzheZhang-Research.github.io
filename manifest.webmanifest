@@ -1,6 +1,6 @@
 {
-  "name": "重要日程倒计时",
-  "short_name": "倒计时",
+  "name": "哲哲备忘录",
+  "short_name": "哲哲备忘录",
   "description": "支持提醒、日视图、周视图和农历显示的重要事件倒计时网站。",
   "start_url": "/",
   "display": "standalone",
