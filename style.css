@@ -9,6 +9,16 @@
     --accent-soft: #dce9e4;
     --warning: #8c5a2d;
     --shadow: 0 24px 70px rgba(45, 63, 57, 0.12);
+    --green: #2f6a58;
+    --green-bg: #e4f1ec;
+    --amber: #9a6a26;
+    --amber-bg: #f7eddc;
+    --rose: #9a4f62;
+    --rose-bg: #f7e7eb;
+    --slate: #55616b;
+    --slate-bg: #e8edf0;
+    --violet: #68588c;
+    --violet-bg: #ece7f7;
 }
 
 * {
@@ -162,6 +172,14 @@ select,
     padding: 26px;
 }
 
+.form-actions,
+.view-switcher,
+.event-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
 .panel-head {
     display: flex;
     justify-content: space-between;
@@ -296,6 +314,11 @@ select:focus {
     color: var(--ink);
 }
 
+.active-view {
+    background: var(--ink);
+    color: #f8f8f4;
+}
+
 .primary-btn:hover,
 .ghost-btn:hover,
 .icon-btn:hover {
@@ -316,6 +339,14 @@ select:focus {
     align-items: start;
 }
 
+.event-item.done {
+    opacity: 0.68;
+}
+
+.event-item.done .event-title {
+    text-decoration: line-through;
+}
+
 .event-heading-row {
     display: flex;
     justify-content: space-between;
@@ -326,6 +357,42 @@ select:focus {
 .event-chip,
 .event-count {
     margin: 0;
+}
+
+.event-chip {
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+}
+
+.tag-green {
+    color: var(--green);
+    background: var(--green-bg);
+    border-color: rgba(47, 106, 88, 0.18);
+}
+
+.tag-amber {
+    color: var(--amber);
+    background: var(--amber-bg);
+    border-color: rgba(154, 106, 38, 0.16);
+}
+
+.tag-rose {
+    color: var(--rose);
+    background: var(--rose-bg);
+    border-color: rgba(154, 79, 98, 0.16);
+}
+
+.tag-slate {
+    color: var(--slate);
+    background: var(--slate-bg);
+    border-color: rgba(85, 97, 107, 0.14);
+}
+
+.tag-violet {
+    color: var(--violet);
+    background: var(--violet-bg);
+    border-color: rgba(104, 88, 140, 0.16);
 }
 
 .event-count {
@@ -348,6 +415,37 @@ select:focus {
     display: flex;
     flex-wrap: wrap;
     gap: 10px 16px;
+    color: var(--muted);
+}
+
+.calendar-panel {
+    margin-bottom: 22px;
+}
+
+.calendar-summary {
+    margin-bottom: 14px;
+    color: var(--muted);
+}
+
+.calendar-list {
+    display: grid;
+    gap: 12px;
+}
+
+.calendar-card {
+    padding: 18px;
+    border-radius: 18px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.calendar-card h3 {
+    font-size: 22px;
+    margin-bottom: 6px;
+}
+
+.calendar-card p {
+    margin: 4px 0;
     color: var(--muted);
 }
 

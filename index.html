@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>重要日程倒计时</title>
     <meta name="description" content="简约美观的每日重要事件倒计时网站，支持提醒、日期展示和农历。">
+    <meta name="theme-color" content="#17211e">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -81,6 +84,7 @@
                 </div>
 
                 <form id="eventForm" class="event-form">
+                    <input id="editIdInput" type="hidden">
                     <label>
                         事件名称
                         <input id="titleInput" type="text" maxlength="40" placeholder="例如：CSC 材料提交" required>
@@ -111,6 +115,18 @@
                             </select>
                         </label>
                         <label>
+                            颜色标签
+                            <select id="colorInput">
+                                <option value="green">松绿</option>
+                                <option value="amber">琥珀</option>
+                                <option value="rose">玫瑰</option>
+                                <option value="slate">岩灰</option>
+                                <option value="violet">紫灰</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="form-row">
+                        <label>
                             提前提醒
                             <select id="reminderInput">
                                 <option value="0">不提醒</option>
@@ -120,10 +136,35 @@
                                 <option value="1440">提前 1 天</option>
                             </select>
                         </label>
+                        <label>
+                            完成状态
+                            <select id="completedInput">
+                                <option value="false">未完成</option>
+                                <option value="true">已完成</option>
+                            </select>
+                        </label>
                     </div>
-                    <button class="primary-btn" type="submit">保存事件</button>
+                    <div class="form-actions">
+                        <button id="submitBtn" class="primary-btn" type="submit">保存事件</button>
+                        <button id="cancelEditBtn" class="ghost-btn hidden" type="button">取消编辑</button>
+                    </div>
                 </form>
             </section>
+        </section>
+
+        <section class="panel calendar-panel">
+            <div class="panel-head">
+                <div>
+                    <p class="panel-kicker">Calendar Views</p>
+                    <h2>日视图与周视图</h2>
+                </div>
+                <div class="view-switcher">
+                    <button class="ghost-btn active-view" type="button" data-view="day">今日</button>
+                    <button class="ghost-btn" type="button" data-view="week">本周</button>
+                </div>
+            </div>
+            <div id="calendarSummary" class="calendar-summary"></div>
+            <div id="calendarList" class="calendar-list"></div>
         </section>
 
         <section class="panel list-panel">
@@ -149,9 +190,12 @@
                 <div class="event-meta-row">
                     <span class="event-target"></span>
                     <span class="event-reminder"></span>
+                    <span class="event-state"></span>
                 </div>
             </div>
             <div class="event-actions">
+                <button class="icon-btn complete-btn" type="button">完成</button>
+                <button class="icon-btn edit-btn" type="button">编辑</button>
                 <button class="icon-btn delete-btn" type="button">删除</button>
             </div>
         </article>

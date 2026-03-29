@@ -3,7 +3,9 @@ const REMINDER_TICK_MS = 30000;
 
 const state = {
     events: [],
-    reminderTimer: null
+    currentView: "day",
+    reminderTimer: null,
+    installPrompt: null
 };
 
 const el = {
@@ -23,15 +25,23 @@ const el = {
     hoursValue: document.getElementById("hoursValue"),
     minutesValue: document.getElementById("minutesValue"),
     eventList: document.getElementById("eventList"),
+    calendarList: document.getElementById("calendarList"),
+    calendarSummary: document.getElementById("calendarSummary"),
     eventForm: document.getElementById("eventForm"),
+    editIdInput: document.getElementById("editIdInput"),
     titleInput: document.getElementById("titleInput"),
     descInput: document.getElementById("descInput"),
     dateInput: document.getElementById("dateInput"),
     timeInput: document.getElementById("timeInput"),
     categoryInput: document.getElementById("categoryInput"),
+    colorInput: document.getElementById("colorInput"),
     reminderInput: document.getElementById("reminderInput"),
+    completedInput: document.getElementById("completedInput"),
     notifyBtn: document.getElementById("notifyBtn"),
-    template: document.getElementById("eventItemTemplate")
+    submitBtn: document.getElementById("submitBtn"),
+    cancelEditBtn: document.getElementById("cancelEditBtn"),
+    template: document.getElementById("eventItemTemplate"),
+    viewButtons: Array.from(document.querySelectorAll("[data-view]"))
 };
 
 function loadEvents() {
@@ -63,6 +73,14 @@ function formatDateTime(date) {
     }).format(date);
 }
 
+function formatDate(date) {
+    return new Intl.DateTimeFormat("zh-CN", {
+        month: "long",
+        day: "numeric",
+        weekday: "long"
+    }).format(date);
+}
+
 function getLunarText(date) {
     const lunar = new Intl.DateTimeFormat("zh-CN-u-ca-chinese", {
         year: "numeric",
@@ -79,9 +97,7 @@ function updateClock() {
         month: "long",
         day: "numeric"
     }).format(now);
-    el.weekdayText.textContent = new Intl.DateTimeFormat("zh-CN", {
-        weekday: "long"
-    }).format(now);
+    el.weekdayText.textContent = new Intl.DateTimeFormat("zh-CN", { weekday: "long" }).format(now);
     el.clockText.textContent = now.toLocaleTimeString("zh-CN", { hour12: false });
     el.lunarDate.textContent = getLunarText(now);
 }
@@ -93,33 +109,32 @@ function sortEvents() {
 function getTimeParts(targetAt) {
     const now = Date.now();
     const diff = new Date(targetAt).getTime() - now;
-
     if (diff <= 0) {
         return { expired: true, days: 0, hours: 0, minutes: 0, raw: diff };
     }
-
     const totalMinutes = Math.floor(diff / 60000);
-    const days = Math.floor(totalMinutes / (60 * 24));
-    const hours = Math.floor((totalMinutes % (60 * 24)) / 60);
-    const minutes = totalMinutes % 60;
-    return { expired: false, days, hours, minutes, raw: diff };
+    return {
+        expired: false,
+        days: Math.floor(totalMinutes / (60 * 24)),
+        hours: Math.floor((totalMinutes % (60 * 24)) / 60),
+        minutes: totalMinutes % 60,
+        raw: diff
+    };
 }
 
 function getReminderText(minutes) {
-    if (!minutes) {
-        return "不提醒";
-    }
-    if (minutes < 60) {
-        return `提前 ${minutes} 分钟提醒`;
-    }
-    if (minutes < 1440) {
-        return `提前 ${minutes / 60} 小时提醒`;
-    }
+    if (!minutes) return "不提醒";
+    if (minutes < 60) return `提前 ${minutes} 分钟提醒`;
+    if (minutes < 1440) return `提前 ${minutes / 60} 小时提醒`;
     return `提前 ${minutes / 1440} 天提醒`;
 }
 
+function applyTagClass(node, color) {
+    node.className = `event-chip tag-${color || "green"}`;
+}
+
 function renderFeatured() {
-    const upcoming = state.events.find(event => new Date(event.targetAt).getTime() > Date.now());
+    const upcoming = state.events.find(event => !event.completed && new Date(event.targetAt).getTime() > Date.now());
     if (!upcoming) {
         el.featuredEvent.classList.add("hidden");
         el.emptyState.classList.remove("hidden");
@@ -130,6 +145,7 @@ function renderFeatured() {
     el.emptyState.classList.add("hidden");
     el.featuredEvent.classList.remove("hidden");
     el.featuredTag.textContent = upcoming.category;
+    el.featuredTag.className = `event-tag event-chip tag-${upcoming.color || "green"}`;
     el.featuredReminder.textContent = getReminderText(upcoming.reminderMinutes);
     el.featuredTitle.textContent = upcoming.title;
     el.featuredDesc.textContent = upcoming.description || "这是一件值得提前准备的重要事情。";
@@ -137,7 +153,93 @@ function renderFeatured() {
     el.hoursValue.textContent = String(parts.hours);
     el.minutesValue.textContent = String(parts.minutes);
     el.featuredTarget.textContent = `目标日期：${formatDateTime(new Date(upcoming.targetAt))}`;
-    el.featuredStatus.textContent = parts.expired ? "状态：已到期" : `状态：剩余 ${parts.days} 天 ${parts.hours} 小时 ${parts.minutes} 分钟`;
+    el.featuredStatus.textContent = `状态：剩余 ${parts.days} 天 ${parts.hours} 小时 ${parts.minutes} 分钟`;
+}
+
+function startOfDay(date) {
+    const copy = new Date(date);
+    copy.setHours(0, 0, 0, 0);
+    return copy;
+}
+
+function endOfDay(date) {
+    const copy = new Date(date);
+    copy.setHours(23, 59, 59, 999);
+    return copy;
+}
+
+function getCalendarEvents() {
+    const now = new Date();
+    const dayStart = startOfDay(now).getTime();
+    const dayEnd = endOfDay(now).getTime();
+    const weekEnd = endOfDay(new Date(now.getFullYear(), now.getMonth(), now.getDate() + 6)).getTime();
+
+    return state.events.filter(event => {
+        const target = new Date(event.targetAt).getTime();
+        if (state.currentView === "day") {
+            return target >= dayStart && target <= dayEnd;
+        }
+        return target >= dayStart && target <= weekEnd;
+    });
+}
+
+function renderCalendar() {
+    const items = getCalendarEvents();
+    el.calendarList.innerHTML = "";
+
+    el.viewButtons.forEach(button => {
+        button.classList.toggle("active-view", button.dataset.view === state.currentView);
+    });
+
+    el.calendarSummary.textContent = state.currentView === "day"
+        ? "只显示今天要发生的事件。"
+        : "显示从今天开始 7 天内的事件。";
+
+    if (!items.length) {
+        el.calendarList.innerHTML = '<div class="empty-state"><p>这个视图中还没有事件。</p></div>';
+        return;
+    }
+
+    items.forEach(event => {
+        const card = document.createElement("article");
+        card.className = "calendar-card";
+        card.innerHTML = `
+            <p class="event-chip tag-${event.color || "green"}">${event.category}</p>
+            <h3>${event.title}</h3>
+            <p>${formatDate(new Date(event.targetAt))}</p>
+            <p>${formatDateTime(new Date(event.targetAt))}</p>
+            <p>${event.completed ? "已完成" : getReminderText(event.reminderMinutes)}</p>
+        `;
+        el.calendarList.appendChild(card);
+    });
+}
+
+function resetForm() {
+    el.eventForm.reset();
+    el.editIdInput.value = "";
+    el.submitBtn.textContent = "保存事件";
+    el.cancelEditBtn.classList.add("hidden");
+    seedDateDefaults();
+    el.timeInput.value = "09:00";
+    el.categoryInput.value = "学业";
+    el.colorInput.value = "green";
+    el.reminderInput.value = "0";
+    el.completedInput.value = "false";
+}
+
+function populateForm(event) {
+    el.editIdInput.value = event.id;
+    el.titleInput.value = event.title;
+    el.descInput.value = event.description || "";
+    el.dateInput.value = event.targetAt.slice(0, 10);
+    el.timeInput.value = event.targetAt.slice(11, 16);
+    el.categoryInput.value = event.category;
+    el.colorInput.value = event.color || "green";
+    el.reminderInput.value = String(event.reminderMinutes);
+    el.completedInput.value = String(Boolean(event.completed));
+    el.submitBtn.textContent = "保存修改";
+    el.cancelEditBtn.classList.remove("hidden");
+    window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function renderEventList() {
@@ -157,27 +259,46 @@ function renderEventList() {
         const description = fragment.querySelector(".event-description");
         const target = fragment.querySelector(".event-target");
         const reminder = fragment.querySelector(".event-reminder");
+        const eventState = fragment.querySelector(".event-state");
+        const completeBtn = fragment.querySelector(".complete-btn");
+        const editBtn = fragment.querySelector(".edit-btn");
         const deleteBtn = fragment.querySelector(".delete-btn");
 
         const parts = getTimeParts(event.targetAt);
+        applyTagClass(chip, event.color);
         chip.textContent = event.category;
-        count.textContent = parts.expired
-            ? "已到期"
-            : `${parts.days} 天 ${parts.hours} 小时 ${parts.minutes} 分钟`;
+        count.textContent = event.completed
+            ? "已完成"
+            : parts.expired
+                ? "已到期"
+                : `${parts.days} 天 ${parts.hours} 小时 ${parts.minutes} 分钟`;
         title.textContent = event.title;
         description.textContent = event.description || "未填写描述";
         target.textContent = formatDateTime(new Date(event.targetAt));
         reminder.textContent = getReminderText(event.reminderMinutes);
+        eventState.textContent = event.completed ? "状态：已完成" : "状态：进行中";
+        completeBtn.textContent = event.completed ? "取消完成" : "完成";
 
-        deleteBtn.addEventListener("click", () => {
-            state.events = state.events.filter(entry => entry.id !== event.id);
+        if (event.completed || parts.expired) {
+            item.classList.add("done");
+        }
+
+        completeBtn.addEventListener("click", () => {
+            event.completed = !event.completed;
             saveEvents();
             renderAll();
         });
 
-        if (parts.expired) {
-            item.style.opacity = "0.68";
-        }
+        editBtn.addEventListener("click", () => populateForm(event));
+
+        deleteBtn.addEventListener("click", () => {
+            state.events = state.events.filter(entry => entry.id !== event.id);
+            saveEvents();
+            if (el.editIdInput.value === event.id) {
+                resetForm();
+            }
+            renderAll();
+        });
 
         el.eventList.appendChild(fragment);
     });
@@ -186,6 +307,7 @@ function renderEventList() {
 function renderAll() {
     sortEvents();
     renderFeatured();
+    renderCalendar();
     renderEventList();
 }
 
@@ -203,22 +325,15 @@ function requestNotificationPermission() {
 }
 
 function maybeSendReminder(event) {
-    if (!event.reminderMinutes) {
-        return;
-    }
+    if (!event.reminderMinutes || event.completed) return;
 
     const now = Date.now();
     const target = new Date(event.targetAt).getTime();
     const reminderTime = target - event.reminderMinutes * 60000;
-
-    if (now < reminderTime || now > target) {
-        return;
-    }
+    if (now < reminderTime || now > target) return;
 
     const reminderKey = `reminded-${event.id}-${event.targetAt}`;
-    if (localStorage.getItem(reminderKey)) {
-        return;
-    }
+    if (localStorage.getItem(reminderKey)) return;
 
     localStorage.setItem(reminderKey, "1");
     if (Notification.permission === "granted") {
@@ -242,44 +357,74 @@ function seedDateDefaults() {
     el.dateInput.value = localDate;
 }
 
-function createEventFromForm(formData) {
-    const targetAt = `${formData.date}T${formData.time || "09:00"}:00`;
+function buildEventFromForm() {
     return {
-        id: crypto.randomUUID(),
-        title: formData.title.trim(),
-        description: formData.description.trim(),
-        category: formData.category,
-        reminderMinutes: Number(formData.reminderMinutes),
-        targetAt,
+        id: el.editIdInput.value || crypto.randomUUID(),
+        title: el.titleInput.value.trim(),
+        description: el.descInput.value.trim(),
+        category: el.categoryInput.value,
+        color: el.colorInput.value,
+        reminderMinutes: Number(el.reminderInput.value),
+        completed: el.completedInput.value === "true",
+        targetAt: `${el.dateInput.value}T${el.timeInput.value || "09:00"}:00`,
         createdAt: new Date().toISOString()
     };
 }
 
 el.eventForm.addEventListener("submit", event => {
     event.preventDefault();
-    const nextEvent = createEventFromForm({
-        title: el.titleInput.value,
-        description: el.descInput.value,
-        date: el.dateInput.value,
-        time: el.timeInput.value,
-        category: el.categoryInput.value,
-        reminderMinutes: el.reminderInput.value
-    });
+    const payload = buildEventFromForm();
+    const index = state.events.findIndex(entry => entry.id === payload.id);
+    if (index >= 0) {
+        payload.createdAt = state.events[index].createdAt;
+        state.events[index] = payload;
+    } else {
+        state.events.push(payload);
+    }
 
-    state.events.push(nextEvent);
     saveEvents();
+    resetForm();
     renderAll();
-    el.eventForm.reset();
-    seedDateDefaults();
-    el.timeInput.value = "09:00";
-    el.categoryInput.value = "学业";
-    el.reminderInput.value = "0";
 });
 
+el.cancelEditBtn.addEventListener("click", resetForm);
 el.notifyBtn.addEventListener("click", requestNotificationPermission);
+el.viewButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        state.currentView = button.dataset.view;
+        renderCalendar();
+    });
+});
+
+window.addEventListener("beforeinstallprompt", event => {
+    event.preventDefault();
+    state.installPrompt = event;
+    const installButton = document.createElement("button");
+    installButton.className = "ghost-btn";
+    installButton.type = "button";
+    installButton.textContent = "安装应用";
+    installButton.addEventListener("click", async () => {
+        if (!state.installPrompt) return;
+        state.installPrompt.prompt();
+        await state.installPrompt.userChoice;
+        state.installPrompt = null;
+        installButton.remove();
+    }, { once: true });
+    const header = document.querySelector(".hero-copy");
+    if (header && !document.getElementById("installBtn")) {
+        installButton.id = "installBtn";
+        header.appendChild(installButton);
+    }
+});
+
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js");
+    });
+}
 
 loadEvents();
-seedDateDefaults();
+resetForm();
 updateClock();
 renderAll();
 checkReminders();

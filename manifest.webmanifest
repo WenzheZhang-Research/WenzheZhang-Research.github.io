@@ -1,0 +1,18 @@
+{
+  "name": "重要日程倒计时",
+  "short_name": "倒计时",
+  "description": "支持提醒、日视图、周视图和农历显示的重要事件倒计时网站。",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f5f0",
+  "theme_color": "#17211e",
+  "lang": "zh-CN",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
