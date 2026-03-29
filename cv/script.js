@@ -96,62 +96,70 @@ document.addEventListener("DOMContentLoaded", () => {
         reader.readAsDataURL(file);
     }
 
-    uploadArea.addEventListener("click", () => cvInput.click());
-    uploadArea.addEventListener("keydown", event => {
-        if (event.key === "Enter" || event.key === " ") {
+    if (uploadArea && cvInput) {
+        uploadArea.addEventListener("click", () => cvInput.click());
+        uploadArea.addEventListener("keydown", event => {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                cvInput.click();
+            }
+        });
+
+        cvInput.addEventListener("change", event => {
+            const file = event.target.files[0];
+            if (file) {
+                readFile(file);
+            }
+        });
+
+        uploadArea.addEventListener("dragover", event => {
             event.preventDefault();
-            cvInput.click();
-        }
-    });
+            uploadArea.classList.add("dragover");
+        });
 
-    cvInput.addEventListener("change", event => {
-        const file = event.target.files[0];
-        if (file) {
-            readFile(file);
-        }
-    });
+        uploadArea.addEventListener("dragleave", () => {
+            uploadArea.classList.remove("dragover");
+        });
 
-    uploadArea.addEventListener("dragover", event => {
-        event.preventDefault();
-        uploadArea.classList.add("dragover");
-    });
+        uploadArea.addEventListener("drop", event => {
+            event.preventDefault();
+            uploadArea.classList.remove("dragover");
+            const file = event.dataTransfer.files[0];
+            if (file) {
+                readFile(file);
+            }
+        });
+    }
 
-    uploadArea.addEventListener("dragleave", () => {
-        uploadArea.classList.remove("dragover");
-    });
+    if (viewBtn) {
+        viewBtn.addEventListener("click", () => {
+            if (!currentCv || !currentCv.dataUrl) {
+                return;
+            }
+            window.open(currentCv.dataUrl, "_blank", "noopener,noreferrer");
+        });
+    }
 
-    uploadArea.addEventListener("drop", event => {
-        event.preventDefault();
-        uploadArea.classList.remove("dragover");
-        const file = event.dataTransfer.files[0];
-        if (file) {
-            readFile(file);
-        }
-    });
+    if (downloadBtn) {
+        downloadBtn.addEventListener("click", () => {
+            if (!currentCv || !currentCv.dataUrl) {
+                return;
+            }
+            const link = document.createElement("a");
+            link.href = currentCv.dataUrl;
+            link.download = currentCv.name;
+            link.click();
+        });
+    }
 
-    viewBtn.addEventListener("click", () => {
-        if (!currentCv || !currentCv.dataUrl) {
-            return;
-        }
-        window.open(currentCv.dataUrl, "_blank", "noopener,noreferrer");
-    });
-
-    downloadBtn.addEventListener("click", () => {
-        if (!currentCv || !currentCv.dataUrl) {
-            return;
-        }
-        const link = document.createElement("a");
-        link.href = currentCv.dataUrl;
-        link.download = currentCv.name;
-        link.click();
-    });
-
-    removeBtn.addEventListener("click", () => {
-        currentCv = null;
-        cvInput.value = "";
-        persistCv();
-        updateCvCard();
-    });
+    if (removeBtn && cvInput) {
+        removeBtn.addEventListener("click", () => {
+            currentCv = null;
+            cvInput.value = "";
+            persistCv();
+            updateCvCard();
+        });
+    }
 
     function getInitials(name) {
         return name
@@ -248,5 +256,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (savedCv) {
         currentCv = savedCv;
     }
-    updateCvCard();
+    if (fileInfo && uploadArea) {
+        updateCvCard();
+    }
 });
