@@ -1,279 +1,155 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Academic Profile | Personal Research Website</title>
-    <meta name="description" content="Academic personal website with biography, research, publications, and CV upload support.">
+    <title>Wenzhe Zhang | Academic Profile</title>
+    <meta name="description" content="Academic profile of Wenzhe Zhang.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="page-shell"></div>
     <div class="site-frame">
-        <header class="hero">
+        <header class="hero hero-simple">
             <div class="hero-copy">
-                <p class="eyebrow">Academic Portfolio</p>
+                <p class="eyebrow">Academic Profile</p>
                 <h1 id="nameDisplay">Wenzhe Zhang</h1>
                 <p class="hero-title" id="titleDisplay">Ph.D. Candidate in Western Economics</p>
                 <p class="hero-summary" id="bioDisplay">
-                    I am a Ph.D. candidate at Wuhan University with research interests in labor economics,
-                    income distribution, and development economics. My current work focuses on trade liberalization,
+                    I am a Ph.D. candidate at Wuhan University. My research interests include labor economics,
+                    income distribution, and development economics, with current work on trade liberalization,
                     child mortality, digital transformation, and long-term human capital accumulation.
                 </p>
                 <div class="hero-actions">
-                    <a class="primary-link" href="#cv-panel">View CV</a>
+                    <a class="secondary-link" href="#publications">Publications</a>
                     <a class="secondary-link" href="#contact">Contact</a>
                     <a class="secondary-link" id="scholarLink" href="#" target="_blank" rel="noreferrer">Google Scholar</a>
                 </div>
             </div>
-            <aside class="hero-card">
-                <div class="portrait" id="avatarPreview" aria-label="profile portrait">
-                    <span>SZ</span>
+            <aside class="hero-meta compact-meta">
+                <div>
+                    <p class="meta-label">Affiliation</p>
+                    <p id="affiliationDisplay">School of Economics and Management, Wuhan University</p>
                 </div>
-                <dl class="fact-list">
-                    <div>
-                        <dt>Affiliation</dt>
-                        <dd id="affiliationDisplay">School of Economics and Management, Wuhan University</dd>
-                    </div>
-                    <div>
-                        <dt>Focus</dt>
-                        <dd>Labor Economics / Income Distribution / Development Economics</dd>
-                    </div>
-                    <div>
-                        <dt>Location</dt>
-                        <dd>Wuhan, Hubei, China</dd>
-                    </div>
-                </dl>
+                <div>
+                    <p class="meta-label">Research Areas</p>
+                    <p>Labor Economics, Income Distribution, Development Economics</p>
+                </div>
+                <div>
+                    <p class="meta-label">Location</p>
+                    <p>Wuhan, Hubei, China</p>
+                </div>
             </aside>
         </header>
 
         <main>
-            <section class="section grid-two">
-                <article class="panel panel-highlight">
-                    <p class="panel-label">Research Statement</p>
-                    <h2>Studying inequality, labor markets, and development through applied empirical research.</h2>
-                    <p>
-                        My research combines policy-relevant economic questions with empirical analysis.
-                        I am especially interested in how institutional change, globalization, and social programs
-                        shape human capital, mortality, firm outcomes, and regional development.
-                    </p>
-                </article>
-                <article class="panel">
-                    <p class="panel-label">Research Interests</p>
-                    <div class="tag-grid" id="researchTags">
-                        <span>Labor Economics</span>
-                        <span>Income Distribution</span>
-                        <span>Development Economics</span>
-                        <span>Digital Transformation</span>
-                        <span>Human Capital</span>
-                        <span>Empirical Analysis</span>
-                    </div>
-                </article>
+            <section class="section section-narrow">
+                <div class="section-heading compact-heading">
+                    <p class="section-kicker">Research Interests</p>
+                    <h2>Current Focus</h2>
+                </div>
+                <div class="tag-grid" id="researchTags">
+                    <span>Labor Economics</span>
+                    <span>Income Distribution</span>
+                    <span>Development Economics</span>
+                    <span>Digital Transformation</span>
+                    <span>Human Capital</span>
+                    <span>Empirical Analysis</span>
+                </div>
             </section>
 
-            <section class="section section-stack">
-                <div class="section-heading">
-                    <p class="section-kicker">Selected Work</p>
-                    <h2>Representative research topics and academic work</h2>
+            <section class="section section-narrow">
+                <div class="section-heading compact-heading">
+                    <p class="section-kicker">Education</p>
+                    <h2>Academic Training</h2>
                 </div>
-                <div class="project-grid">
-                    <article class="project-card">
-                        <p class="project-type">Research</p>
-                        <h3>Trade liberalization and child mortality</h3>
-                        <p>Examining how openness and market integration affect household welfare and child health outcomes in China.</p>
+                <div class="simple-list">
+                    <article class="simple-item">
+                        <h3>Ph.D. Candidate in Western Economics</h3>
+                        <p>School of Economics and Management, Wuhan University, 2024.09-2028.06 (expected)</p>
                     </article>
-                    <article class="project-card">
-                        <p class="project-type">Systems</p>
-                        <h3>Digital transformation and enterprise pay gaps</h3>
-                        <p>Analyzing how digital transformation reshapes internal compensation structures within firms.</p>
+                    <article class="simple-item">
+                        <h3>M.A. in Finance</h3>
+                        <p>Xiangtan University, 2021-2024</p>
                     </article>
-                    <article class="project-card">
-                        <p class="project-type">Applied AI</p>
-                        <h3>Hope Project and long-term human capital</h3>
-                        <p>Studying the long-term impact of social assistance and educational support on human capital accumulation.</p>
+                    <article class="simple-item">
+                        <h3>B.Eng. in Software Engineering</h3>
+                        <p>Sun Yat-sen University, 2014-2018</p>
                     </article>
                 </div>
             </section>
 
-            <section class="section timeline-wrap">
-                <div class="section-heading">
-                    <p class="section-kicker">Academic Journey</p>
-                    <h2>Experience, publications, and milestones</h2>
+            <section class="section section-narrow" id="publications">
+                <div class="section-heading compact-heading">
+                    <p class="section-kicker">Publications</p>
+                    <h2>Selected Work</h2>
                 </div>
-                <div class="timeline">
-                    <article class="timeline-item">
-                        <span class="timeline-year">2026</span>
-                        <div>
-                            <h3>Ph.D. Candidate in Western Economics</h3>
-                            <p>School of Economics and Management, Wuhan University. Expected graduation in 2028.</p>
-                        </div>
+                <div class="publication-list publication-list-simple" id="publicationList">
+                    <article class="publication-item">
+                        <h3>How Digital Transformation Affects Internal Pay Gap of Enterprises</h3>
+                        <p class="publication-meta">CSSCI Journal, 2023</p>
+                        <p>Wenzhe Zhang, second author and corresponding author.</p>
                     </article>
-                    <article class="timeline-item">
-                        <span class="timeline-year">2024-2025</span>
-                        <div>
-                            <h3>Scholarship and working paper development</h3>
-                            <p>Received the Second-Class Excellent Academic Scholarship and advanced empirical work on trade and human capital topics.</p>
-                        </div>
+                    <article class="publication-item">
+                        <h3>Spatial Differentiation and Driving Factors of County Economic Resilience in Central China</h3>
+                        <p class="publication-meta">CSSCI Journal, 2023</p>
+                        <p>Wenzhe Zhang, third author.</p>
                     </article>
-                    <article class="timeline-item">
-                        <span class="timeline-year">2018-2024</span>
-                        <div>
-                            <h3>Graduate training and project experience</h3>
-                            <p>Completed M.A. in Finance, participated in a National Social Science Fund key project, and built a cross-disciplinary background from software engineering to empirical economics.</p>
-                        </div>
+                    <article class="publication-item">
+                        <h3>The Impact of Trade Liberalization on Child Mortality: Evidence from China</h3>
+                        <p class="publication-meta">Working paper under revision, 2025</p>
+                        <p>Current empirical research on trade liberalization and health outcomes in China.</p>
+                    </article>
+                    <article class="publication-item">
+                        <h3>Long-term Impact Assessment of the Hope Project: Empirical Studies on Human Capital Accumulation</h3>
+                        <p class="publication-meta">Working paper, 2026</p>
+                        <p>Core research prepared for visiting scholar application.</p>
                     </article>
                 </div>
             </section>
 
-            <section class="section grid-two academic-records">
-                <article class="panel">
-                    <p class="panel-label">Education</p>
-                    <div class="record-list" id="educationList">
-                        <article class="record-item">
-                            <div class="record-meta">Degree</div>
-                            <h3>Ph.D. Candidate in Western Economics</h3>
-                            <p>School of Economics and Management, Wuhan University, 2024.09-2028.06 (expected)</p>
-                            <p>Current doctoral research in labor economics, income distribution, and development economics.</p>
-                        </article>
-                        <article class="record-item">
-                            <div class="record-meta">Degree</div>
-                            <h3>M.A. in Finance</h3>
-                            <p>Xiangtan University, 2021-2024</p>
-                            <p>Graduate training in finance, empirical analysis, and quantitative research.</p>
-                        </article>
-                        <article class="record-item">
-                            <div class="record-meta">Degree</div>
-                            <h3>B.Eng. in Software Engineering</h3>
-                            <p>Sun Yat-sen University, 2014-2018</p>
-                            <p>Undergraduate foundation in software engineering, programming, and analytical methods.</p>
-                        </article>
-                    </div>
-                </article>
-                <article class="panel">
-                    <p class="panel-label">Selected Projects</p>
-                    <div class="record-list" id="projectList">
-                        <article class="record-item">
-                            <div class="record-meta">Project</div>
-                            <h3>National Social Science Fund Key Project (18AJL005)</h3>
-                            <p>Team member, 2018-2022. Contributed to data collection, empirical analysis, and writing.</p>
-                        </article>
-                        <article class="record-item">
-                            <div class="record-meta">Project</div>
-                            <h3>The Impact of Trade Liberalization on Child Mortality</h3>
-                            <p>Working paper under revision, 2025. Empirical evidence from China.</p>
-                        </article>
-                        <article class="record-item">
-                            <div class="record-meta">Project</div>
-                            <h3>Long-term Impact Assessment of the Hope Project</h3>
-                            <p>Working paper, 2026. Core research prepared for visiting scholar application.</p>
-                        </article>
-                    </div>
-                </article>
+            <section class="section section-narrow">
+                <div class="section-heading compact-heading">
+                    <p class="section-kicker">Projects</p>
+                    <h2>Research Projects</h2>
+                </div>
+                <div class="simple-list">
+                    <article class="simple-item">
+                        <h3>National Social Science Fund Key Project (18AJL005)</h3>
+                        <p>Team member, 2018-2022. Contributed to data collection, empirical analysis, and writing.</p>
+                    </article>
+                    <article class="simple-item">
+                        <h3>The Impact of Trade Liberalization on Child Mortality</h3>
+                        <p>Working paper under revision, 2025. Empirical evidence from China.</p>
+                    </article>
+                    <article class="simple-item">
+                        <h3>Long-term Impact Assessment of the Hope Project</h3>
+                        <p>Working paper, 2026. Core research prepared for visiting scholar application.</p>
+                    </article>
+                </div>
             </section>
 
-            <section class="section grid-two">
-                <article class="panel">
-                    <p class="panel-label">Selected Publications</p>
-                    <div class="publication-list" id="publicationList">
-                        <article class="publication-item">
-                            <h3>How Digital Transformation Affects Internal Pay Gap of Enterprises</h3>
-                            <p class="publication-meta">CSSCI Journal, 2023</p>
-                            <p>Wenzhe Zhang, second author and corresponding author.</p>
-                        </article>
-                        <article class="publication-item">
-                            <h3>Spatial Differentiation and Driving Factors of County Economic Resilience in Central China</h3>
-                            <p class="publication-meta">CSSCI Journal, 2023</p>
-                            <p>Wenzhe Zhang, third author.</p>
-                        </article>
-                        <article class="publication-item">
-                            <h3>The Impact of Trade Liberalization on Child Mortality: Evidence from China</h3>
-                            <p class="publication-meta">Working paper under revision, 2025</p>
-                            <p>Current empirical research on trade liberalization and health outcomes in China.</p>
-                        </article>
-                        <article class="publication-item">
-                            <h3>Long-term Impact Assessment of the Hope Project: Empirical Studies on Human Capital Accumulation</h3>
-                            <p class="publication-meta">Working paper, 2026</p>
-                            <p>Core research prepared for visiting scholar application.</p>
-                        </article>
-                    </div>
-                </article>
-                <article class="panel" id="cv-panel">
-                    <p class="panel-label">Curriculum Vitae</p>
-                    <h2>CV update in progress</h2>
-                    <p class="panel-intro">
-                        A polished PDF CV is not available yet. The downloadable version is temporarily offline.
-                    </p>
-                    <div class="upload-area cv-placeholder">
-                        <p class="upload-mark">CV</p>
-                        <h3>PDF resume unavailable</h3>
-                        <p>Please refer to the academic profile on this page for current information.</p>
-                    </div>
-                </article>
+            <section class="section section-narrow cv-note-section">
+                <div class="section-heading compact-heading">
+                    <p class="section-kicker">Curriculum Vitae</p>
+                    <h2>Document Availability</h2>
+                </div>
+                <p class="plain-note">A PDF CV is not provided on this page at the moment. Please refer to the profile details and publication list above for current information.</p>
             </section>
 
-            <section class="section contact-band" id="contact">
-                <div>
+            <section class="section section-narrow contact-simple" id="contact">
+                <div class="section-heading compact-heading">
                     <p class="section-kicker">Contact</p>
-                    <h2>Open to academic exchange, visiting research opportunities, and collaboration.</h2>
+                    <h2>Get in Touch</h2>
                 </div>
-                <div class="contact-links">
+                <div class="contact-links contact-links-simple">
                     <a id="emailLink" href="mailto:zhangwenzhe@whu.edu.cn">zhangwenzhe@whu.edu.cn</a>
                     <a id="githubLink" href="https://github.com/WenzheZhang-Research" target="_blank" rel="noreferrer">github.com/WenzheZhang-Research</a>
                 </div>
             </section>
         </main>
-
-        <footer class="site-footer">
-            <p>Personal academic website template. Edit content locally and publish when ready.</p>
-            <button class="floating-editor" id="editBtn" type="button">Edit Profile</button>
-        </footer>
-    </div>
-
-    <div class="modal" id="editModal" aria-hidden="true">
-        <div class="modal-card">
-            <div class="modal-header">
-                <p class="panel-label">Profile Editor</p>
-                <h2>Update your academic homepage</h2>
-            </div>
-            <div class="form-grid">
-                <label>
-                    Name
-                    <input id="nameInput" type="text" placeholder="Your full name">
-                </label>
-                <label>
-                    Title
-                    <input id="titleInput" type="text" placeholder="Academic title or research area">
-                </label>
-                <label>
-                    Affiliation
-                    <input id="affiliationInput" type="text" placeholder="University, lab, or organization">
-                </label>
-                <label>
-                    Email
-                    <input id="emailInput" type="email" placeholder="your@email.com">
-                </label>
-                <label>
-                    GitHub URL
-                    <input id="githubInput" type="url" placeholder="https://github.com/yourname">
-                </label>
-                <label>
-                    Avatar
-                    <input id="avatarInput" type="file" accept="image/*">
-                </label>
-                <label class="full-span">
-                    Biography
-                    <textarea id="bioInput" rows="5" placeholder="Short academic biography"></textarea>
-                </label>
-            </div>
-            <p class="editor-note">For full papers, projects, and education details, edit the HTML directly or send me your real data and I will wire it in.</p>
-            <div class="modal-actions">
-                <button class="action-btn" id="saveBtn" type="button">Save</button>
-                <button class="action-btn action-btn-muted" id="cancelBtn" type="button">Cancel</button>
-            </div>
-        </div>
     </div>
 
     <script src="script.js"></script>
