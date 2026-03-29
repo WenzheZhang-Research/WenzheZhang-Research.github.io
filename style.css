@@ -507,10 +507,6 @@ select:focus {
     box-shadow: 0 22px 42px rgba(93, 132, 207, 0.38);
 }
 
-.install-fab.hidden {
-    display: none;
-}
-
 @media (max-width: 920px) {
     .hero-card,
     .layout-grid {

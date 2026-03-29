@@ -400,15 +400,17 @@ el.viewButtons.forEach(button => {
 window.addEventListener("beforeinstallprompt", event => {
     event.preventDefault();
     state.installPrompt = event;
-    el.installFab.classList.remove("hidden");
 });
 
 el.installFab.addEventListener("click", async () => {
-    if (!state.installPrompt) return;
-    state.installPrompt.prompt();
-    await state.installPrompt.userChoice;
-    state.installPrompt = null;
-    el.installFab.classList.add("hidden");
+    if (state.installPrompt) {
+        state.installPrompt.prompt();
+        await state.installPrompt.userChoice;
+        state.installPrompt = null;
+        return;
+    }
+
+    alert("当前浏览器没有提供自动安装弹窗。\n你可以使用浏览器菜单里的“安装应用”或“安装此站点为应用”来手动安装。");
 });
 
 if ("serviceWorker" in navigator) {
