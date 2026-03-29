@@ -482,6 +482,35 @@ select:focus {
     color: var(--muted);
 }
 
+.install-fab {
+    position: fixed;
+    right: 26px;
+    bottom: 26px;
+    z-index: 30;
+    border: 0;
+    border-radius: 999px;
+    padding: 14px 22px;
+    background: linear-gradient(135deg, #7ea7df, #5d84cf);
+    color: #f8fbff;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    box-shadow: 0 18px 38px rgba(93, 132, 207, 0.32);
+    cursor: pointer;
+    transition: transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+    animation: floatGentle 4.8s ease-in-out infinite;
+}
+
+.install-fab:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 22px 42px rgba(93, 132, 207, 0.38);
+}
+
+.install-fab.hidden {
+    display: none;
+}
+
 @media (max-width: 920px) {
     .hero-card,
     .layout-grid {
@@ -509,5 +538,11 @@ select:focus {
 
     .event-item {
         gap: 12px;
+    }
+
+    .install-fab {
+        right: 16px;
+        bottom: 16px;
+        padding: 13px 18px;
     }
 }

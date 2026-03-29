@@ -40,6 +40,7 @@ const el = {
     notifyBtn: document.getElementById("notifyBtn"),
     submitBtn: document.getElementById("submitBtn"),
     cancelEditBtn: document.getElementById("cancelEditBtn"),
+    installFab: document.getElementById("installFab"),
     template: document.getElementById("eventItemTemplate"),
     viewButtons: Array.from(document.querySelectorAll("[data-view]"))
 };
@@ -399,22 +400,15 @@ el.viewButtons.forEach(button => {
 window.addEventListener("beforeinstallprompt", event => {
     event.preventDefault();
     state.installPrompt = event;
-    const installButton = document.createElement("button");
-    installButton.className = "ghost-btn";
-    installButton.type = "button";
-    installButton.textContent = "安装应用";
-    installButton.addEventListener("click", async () => {
-        if (!state.installPrompt) return;
-        state.installPrompt.prompt();
-        await state.installPrompt.userChoice;
-        state.installPrompt = null;
-        installButton.remove();
-    }, { once: true });
-    const header = document.querySelector(".hero-copy");
-    if (header && !document.getElementById("installBtn")) {
-        installButton.id = "installBtn";
-        header.appendChild(installButton);
-    }
+    el.installFab.classList.remove("hidden");
+});
+
+el.installFab.addEventListener("click", async () => {
+    if (!state.installPrompt) return;
+    state.installPrompt.prompt();
+    await state.installPrompt.userChoice;
+    state.installPrompt = null;
+    el.installFab.classList.add("hidden");
 });
 
 if ("serviceWorker" in navigator) {
